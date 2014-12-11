@@ -15,7 +15,6 @@ class APNS:
 
     def success(self):
         print "Sent push message to APNS gateway."
-        ioloop.IOLoop.instance().stop()
 
     def on_response(self,status, seq):
         print "sent push message to APNS gateway error status %s seq %s" % (status, seq)
@@ -31,8 +30,9 @@ class APNSHandler(web.RequestHandler):
         devicetoken = self.get_argument('device_token',None)
         testapns = APNS(self.apns,devicetoken)
         self.apns.gateway_server.connect(testapns.on_connected)
-        testapns.send()
-        self.write({'response':'Success bro!!'})
+        #testapns.send()
+        self.write({'response':'Success'})
+	testapns.send()
 
 def main():
 
@@ -40,7 +40,7 @@ def main():
    settings = {'debug':True}
    application = web.Application(handlers,**settings)
    http_server = httpserver.HTTPServer(application)
-   port = int(os.environ.get("PORT", 5000))
+   port = int(os.environ.get("PORT", 8888))
    http_server.listen(port)
 
    ioloop.IOLoop.instance().start()
